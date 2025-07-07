@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+html {
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+  
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+.bor{  border: 2px solid rgba(59, 130, 246, 0.2); /* soft blue border */
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2), 0 0 40px rgba(59, 130, 246, 0.1);}
+
+
+@layer utilities {
+  .animate-scroll {
+    animation: scroll 25s linear infinite;
+  }
+}
+/* ─────────────────────────────────────────────────────────
+   Tailwind ‑ add these keyframes once (e.g. globals.css)
+────────────────────────────────────────────────────────── */
+@keyframes float-slow {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+.animate-float-slow {
+  animation: float-slow 16s ease-in-out infinite;
+}
+
+/* burst ripple */
+@keyframes ripple {
+  0%   { transform: scale(0);   opacity: .6; }
+  100% { transform: scale(5); opacity: 0.5;  }
+}
+.animate-ripple {
+  animation: ripple 1s ease-out forwards;
+}
+.man{fill-opacity:0;
+stroke-dashoffset: 0;
+stroke-dasharray: 2000;
+}
+.man{
+  animation:man 20s ease-in-out;
+}
+@keyframes man{
+  0%{
+    stroke-dashoffset: 2000;
+  }
+  100%{
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ───────────── Glitch Intro Font + Animation ───────────── */
+
+
+.glitch-bg {
+  background: #120120;
+  animation: screenGlitch 1.5s ease-in-out;
+}
+
+@keyframes screenGlitch {
+  0%   { background: #3d0281; transform: translate(0); }
+  20%  { background: #000; transform: translate(-2px, 1px); }
+  40%  { background: #3d0281; transform: translate(2px, -2px); }
+  60%  { background: #000; transform: translate(-1px, 2px); }
+  80%  { background: #3d0281; transform: translate(1px, -1px); }
+  100% { background: #000; transform: translate(0); }
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  width: 100%;
+  left: 0;
+  color: #6baf11;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.glitch-text::before {
+  top: -2px;
+  animation: glitchTop 0.3s infinite;
+}
+
+.glitch-text::after {
+  top: 2px;
+  color: #36d5f1;
+  animation: glitchBottom 0.3s infinite;
+}
+
+@keyframes glitchTop {
+  0% { clip-path: inset(0 0 80% 0); transform: translate(2px, -2px); }
+  100% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 2px); }
+}
+
+@keyframes glitchBottom {
+  0% { clip-path: inset(80% 0 0 0); transform: translate(-2px, 2px); }
+  100% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
+}
+.broken-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/glass.png') center/contain;
+  z-index: -10;
+  pointer-events: none;
+  animation: shatterFlash 0.4s ease-in-out;
+}
+
+@keyframes shatterFlash {
+  0% { opacity: 0; transform: scale(1.05); }
+  50% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0.4; }
+}
