@@ -9,9 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "engines": {
-    "node": "20.19.0"
-  },
   "dependencies": {
     "@react-three/drei": "^9.89.6",
     "@react-three/fiber": "^8.13.7",
