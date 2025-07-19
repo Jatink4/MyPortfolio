@@ -27,10 +27,10 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.5 }}
-            className="fixed top-0 right-0 h-full w-[150px] bg-black text-white z-40 shadow-lg"
+            className="fixed top-0 right-0 h-full w-[200px] sm:w-[250px] bg-black  text-white z-40 shadow-lg"
           >
-            <ul className="flex flex-col p-6 gap-6 text-xl mt-50">
-              {["Home", "About", "Projects", "Experience","Contact" ].map((item, i) => (
+            <ul className="flex flex-col p-6 gap-4 text-lg sm:text-xl mt-16">
+              {["Home", "About", "Projects", "Experience","LiveApplication","Contact" ].map((item, i) => (
                 <motion.li
                   key={item}
                   initial={{ opacity: 0, x: 30 }}
