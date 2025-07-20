@@ -158,70 +158,91 @@ export const DrawingBoard = () => {
 
   return (
     
-  <div className="flex flex-col items-center p-4 gap-4 text-white mt-10">
-    <h1 className="text-3xl text-amber-300 font-bold mb-4">Paint Board</h1>
-    <div className="flex gap-2 flex-wrap items-center">
-      <div className="flex gap-2">
-        {tools.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTool(t)}
-            className={`px-3 py-1 rounded ${tool === t ? "bg-blue-500 text-white" : "bg-gray-700 text-white"}`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      <div className="grid grid-cols-10 gap-1">
-        {extendedColors.map((c) => (
-          <button
-            key={c}
-            onClick={() => setColor(c)}
-            className="w-6 h-6 rounded-full border border-white"
-            style={{ backgroundColor: c }}
-          ></button>
-        ))}
-      </div>
-      <select
-        value={brushSize}
-        onChange={(e) => setBrushSize(Number(e.target.value))}
-        className="border border-yellow-400 text-white bg-gray-800 p-1"
-      >
-        {sizes.map((s) => (
-          <option key={s} value={s} className="bg-gray-800">
-            {s}px
-          </option>
-        ))}
-      </select>
-      <button className="bg-yellow-400 text-black px-3 py-1 rounded" onClick={zoomIn}>
-        Zoom In
-      </button>
-      <button className="bg-yellow-400 text-black px-3 py-1 rounded" onClick={zoomOut}>
-        Zoom Out
-      </button>
-      <button className="bg-red-500 text-white px-3 py-1 rounded" onClick={clearCanvas}>
-        Clear
-      </button>
-      <button className="bg-green-600 text-white px-3 py-1 rounded" onClick={saveImage}>
-        Save as PNG
-      </button>
-    </div>
+  <div className="flex flex-col items-center p-4 gap-4 text-white mt-10 w-full max-w-full overflow-x-hidden">
+      <h1 className="text-2xl sm:text-3xl text-amber-300 font-bold text-center">Paint Board</h1>
 
-    <div
-      className="overflow-auto border-2 border-gray-400 bg-white rounded"
-      style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
-    >
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={500}
-        className="cursor-crosshair"
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-      />
-    </div>
+      {/* Toolbar */}
+      <div className="flex flex-wrap gap-3 justify-center w-full">
+        {/* Tool Buttons */}
+        <div className="flex flex-wrap gap-2 justify-center">
+          {tools.map((t) => (
+            <button
+              key={t}
+              onClick={() => setTool(t)}
+              className={`px-3 py-1 rounded text-sm ${
+                tool === t ? "bg-blue-500 text-white" : "bg-gray-700 text-white"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+
+        {/* Color Picker */}
+        <div className="grid grid-cols-10 gap-1 justify-center">
+          {extendedColors.map((c) => (
+            <button
+              key={c}
+              onClick={() => setColor(c)}
+              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-white"
+              style={{ backgroundColor: c }}
+            ></button>
+          ))}
+        </div>
+
+        {/* Size Select & Actions */}
+        <div className="flex flex-wrap gap-2 justify-center items-center">
+          <select
+            value={brushSize}
+            onChange={(e) => setBrushSize(Number(e.target.value))}
+            className="border border-yellow-400 text-white bg-gray-800 px-2 py-1 rounded text-sm"
+          >
+            {sizes.map((s) => (
+              <option key={s} value={s} className="bg-gray-800">
+                {s}px
+              </option>
+            ))}
+          </select>
+
+          <button className="bg-yellow-400 text-black px-2 py-1 rounded text-sm" onClick={zoomIn}>
+            Zoom In
+          </button>
+          <button className="bg-yellow-400 text-black px-2 py-1 rounded text-sm" onClick={zoomOut}>
+            Zoom Out
+          </button>
+          <button className="bg-red-500 text-white px-2 py-1 rounded text-sm" onClick={clearCanvas}>
+            Clear
+          </button>
+          <button className="bg-green-600 text-white px-2 py-1 rounded text-sm" onClick={saveImage}>
+            Save as PNG
+          </button>
+        </div>
+      </div>
+
+      {/* Canvas Container */}
+      <div className="w-full overflow-x-auto border-2 border-gray-400 bg-white rounded">
+  <div
+    className="mx-auto"
+    style={{
+      transform: `scale(${scale})`,
+      transformOrigin: "top left",
+      width: `min(80vw, ${800 * scale}px)`,
+      height: `${500 * scale}px`,
+    }}
+  >
+    <canvas
+      ref={canvasRef}
+      width={800}
+      height={500}
+      className="cursor-crosshair block w-full h-auto"
+      onMouseDown={startDrawing}
+      onMouseMove={draw}
+      onMouseUp={stopDrawing}
+      onMouseLeave={stopDrawing}
+    />
+  </div>
+</div>
+
   </div>
 
 

@@ -28,7 +28,7 @@ function InnerApp() {
   }, [location.pathname]);
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-black w-full h-screen overflow-hidden relative">
+    <div className="bg-gradient-to-br from-gray-900 to-black w-full min-h-screen overflow-hidden relative">
       <div className="absolute inset-0 backdrop-blur-2xl m-10 rounded-4xl bg-white/5 border border-white/10 z-10 overflow-auto bor">
         {!introDone && <IntroScreen onComplete={() => setIntroDone(true)} />}
         {introDone && (

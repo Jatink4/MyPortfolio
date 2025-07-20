@@ -26,37 +26,50 @@ export function GlowCard({ idx, children }) {
   };
 
   return (
-    <motion.div
-      ref={ref}
-      className="relative w-70 mx-auto"
-      initial={{ opacity: 0, y: 80 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      style={{ perspective: 1000 }}
-    >
-      {/* neon ring */}
-      <div
-        className={`absolute -inset-0.5 rounded-xl blur-xl opacity-70
-                    bg-gradient-to-br ${from} ${to}`}
-      />
+   <motion.div
+  ref={ref}
+  className="relative  w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl mx-auto px-4"
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.3 }}
+  transition={{ duration: 0.7, ease: "easeOut" }}
+  style={{ perspective: 1000 }}
+>
+  {/* neon ring */}
+  <div
+    className={`absolute -inset-0.5 rounded-xl blur-xl opacity-70
+                bg-gradient-to-br ${from} ${to}`}
+  />
 
-      {/* card */}
-      <motion.div
-        className={`relative z-10 w-full bg-[#111319]/80 backdrop-blur-lg
-                   rounded-xl p-2 text-white border ${border}
-                   shadow-[0_5px_40px_rgba(0,0,0,0.6)]`}
-        onMouseMove={handleMove}
-        onMouseLeave={() => {
-          x.set(0); y.set(0);
-        }}
-        style={{ rotateX, rotateY }}
-        whileHover={{ scale: 1.05 }}
-        transition={{ type: "spring", stiffness: 130, damping: 12 }}
-      >
-        {children}
-      </motion.div>
-    </motion.div>
+  {/* card */}
+  <motion.div
+    className={`relative z-10 w-full h-[500px] flex flex-col justify-between
+                bg-[#111319]/80 backdrop-blur-lg rounded-xl p-4 text-white border ${border}
+                shadow-[0_5px_40px_rgba(0,0,0,0.6)]`}
+    onMouseMove={handleMove}
+    onTouchMove={(e) => {
+      if (!ref.current) return;
+      const touch = e.touches[0];
+      const b = ref.current.getBoundingClientRect();
+      x.set(touch.clientX - b.left - b.width / 2);
+      y.set(touch.clientY - b.top - b.height / 2);
+    }}
+    onMouseLeave={() => {
+      x.set(0);
+      y.set(0);
+    }}
+    onTouchEnd={() => {
+      x.set(0);
+      y.set(0);
+    }}
+    style={{ rotateX, rotateY }}
+    whileHover={{ scale: 1.05 }}
+    transition={{ type: "spring", stiffness: 130, damping: 12 }}
+  >
+    {children}
+  </motion.div>
+</motion.div>
+
   );
 }
 export function FlipCard({ frontImg, children }) {
@@ -92,23 +105,33 @@ export default function OrbitProjects() {
   }, []);
 
   useEffect(() => {
-    const box = document.getElementById("parallax");
-    if (!box) return;
+  const box = document.getElementById("parallax");
+  if (!box) return;
 
-    const parallax = (e) => {
-      const _w = window.innerWidth / 2;
-      const _h = window.innerHeight / 2;
-      const _mouseX = e.clientX;
-      const _mouseY = e.clientY;
-      const _depth1 = `${50 - (_mouseX - _w) * 0.01}% ${50 - (_mouseY - _h) * 0.01}%`;
-      const _depth2 = `${50 - (_mouseX - _w) * 0.02}% ${50 - (_mouseY - _h) * 0.02}%`;
-      const _depth3 = `${50 - (_mouseX - _w) * 0.06}% ${50 - (_mouseY - _h) * 0.06}%`;
-      box.style.backgroundPosition = `${_depth3}, ${_depth2}, ${_depth1}`;
-    };
+  const handleParallax = (x, y) => {
+    const _w = window.innerWidth / 2;
+    const _h = window.innerHeight / 2;
+    const _depth1 = `${50 - (x - _w) * 0.01}% ${50 - (y - _h) * 0.01}%`;
+    const _depth2 = `${50 - (x - _w) * 0.02}% ${50 - (y - _h) * 0.02}%`;
+    const _depth3 = `${50 - (x - _w) * 0.06}% ${50 - (y - _h) * 0.06}%`;
+    box.style.backgroundPosition = `${_depth3}, ${_depth2}, ${_depth1}`;
+  };
 
-    window.addEventListener("mousemove", parallax);
-    return () => window.removeEventListener("mousemove", parallax);
-  }, []);
+  const parallaxMouse = (e) => handleParallax(e.clientX, e.clientY);
+  const parallaxTouch = (e) => {
+    const touch = e.touches[0];
+    handleParallax(touch.clientX, touch.clientY);
+  };
+
+  window.addEventListener("mousemove", parallaxMouse);
+  window.addEventListener("touchmove", parallaxTouch);
+
+  return () => {
+    window.removeEventListener("mousemove", parallaxMouse);
+    window.removeEventListener("touchmove", parallaxTouch);
+  };
+}, []);
+
 
   
 
@@ -128,9 +151,10 @@ export default function OrbitProjects() {
         }} 
       >
          
-        <h1 className="absolute text-sky-500 font-bold font-sans uppercase  text-8xl top-[47%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-          Projects
-        </h1>
+        <h1 className="absolute text-sky-500 font-bold font-sans uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl top-[47%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center px-2">
+  Projects
+</h1>
+
       </div>
       <section
       className="min-h-screen w-full py-20  flex flex-col gap-16 items-center
@@ -144,7 +168,7 @@ export default function OrbitProjects() {
         {projects.map((p, i) => (
   <GlowCard key={i} idx={i}>
     {/* circular thumb */}
-    <div className="relative mb-4 w-full h-64">
+    <div className="relative mb-4 w-full h-48 sm:h-56 md:h-64 lg:h-72">
      <motion.img
   src={p.image}
   alt={p.title}

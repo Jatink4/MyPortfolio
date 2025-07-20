@@ -1,6 +1,6 @@
 // components/SkillStrip.jsx
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Import skill icons from react-icons
 import {
@@ -33,6 +33,8 @@ const skills = [
 
 export default function SkillStrip() {
   const stripRef = useRef(null);
+  const [activeSkill, setActiveSkill] = useState(null);
+
 
   useEffect(() => {
     const el = stripRef.current;
@@ -49,6 +51,9 @@ export default function SkillStrip() {
     frameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frameId);
   }, []);
+   const handleClick = (idx) => {
+    setActiveSkill((prev) => (prev === idx ? null : idx));
+  };
 
   return (
     <div className="relative overflow-hidden mt-2 p-5 ">
@@ -61,6 +66,7 @@ export default function SkillStrip() {
             key={idx}
             whileHover={{ scale: 1.2 }}
             className="w-20 flex flex-col items-center bg-black pt-5 rounded-lg group cursor-pointer"
+          onClick={() => handleClick(idx)}
           >
             {skill.icon}
             

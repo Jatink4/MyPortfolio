@@ -4,8 +4,21 @@ import { motion } from "framer-motion";
 export default function CustomCursor() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [isDown, setIsDown] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    // Detect touch device
+    const checkIfTouchDevice = () => {
+      if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+        setIsTouchDevice(true);
+      }
+    };
+    checkIfTouchDevice();
+  }, []);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
     const move = (e) => setPos({ x: e.clientX, y: e.clientY });
     const down = () => setIsDown(true);
     const up = () => setIsDown(false);
@@ -19,7 +32,9 @@ export default function CustomCursor() {
       window.removeEventListener("mousedown", down);
       window.removeEventListener("mouseup", up);
     };
-  }, []);
+  }, [isTouchDevice]);
+
+  if (isTouchDevice) return null; // ❌ No cursor on mobile
 
   const size = isDown ? 28 : 18;
   const halo = isDown ? 60 : 45;

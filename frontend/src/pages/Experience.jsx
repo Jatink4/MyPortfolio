@@ -64,99 +64,136 @@ const getCC = u =>
 /* -------------- Main component -------------- */
 export default function Experience() {
   const canvasRef = useRef(null);
-  useSkyline(canvasRef);                   // start skyline
+  useSkyline(canvasRef);
   const [choice, setChoice] = useState(null);
 
   const { data: cf } = useQuery({
-    queryKey:['cf'], queryFn:()=>getCF('JK_Thakur'),
-    enabled: choice==='ratings'
+    queryKey: ['cf'],
+    queryFn: () => getCF('JK_Thakur'),
+    enabled: choice === 'ratings',
   });
   const { data: cc } = useQuery({
-    queryKey:['cc'], queryFn:()=>getCC('jatin4kumar'),
-    enabled: choice==='ratings'
+    queryKey: ['cc'],
+    queryFn: () => getCC('jatin4kumar'),
+    enabled: choice === 'ratings',
   });
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center p-4 text-white">
-      {/* skyline canvas (fixed & behind) */}
+    <section className="relative min-h-screen flex items-center justify-center p-4 text-white overflow-x-hidden">
+      {/* Background Canvas */}
       <canvas
-  ref={canvasRef}
-  className="absolute inset-0 block"
-  style={{
-    background: "linear-gradient(to top, #adff2f 0%, #8a2be2 50%,#800080  100%)",
-    zIndex: 0,
-  }}
-/>
-      {/* subtle texture layer */}
-      <div  className="fixed inset-0 opacity-60 z-0"
-  style={{
-    backgroundImage: "url('https://jackrugile.com/images/misc/skyline-texture.png')",
-    backgroundSize: 'cover',
-    backgroundRepeat: 'repeat',
-    backgroundPosition: 'center'
-  }} />
+        ref={canvasRef}
+        className="absolute inset-0 block"
+        style={{
+          background:
+            'linear-gradient(to top, #adff2f 0%, #8a2be2 50%,#800080  100%)',
+          zIndex: 0,
+        }}
+      />
+      {/* Texture Layer */}
+      <div
+        className="fixed inset-0 opacity-60 z-0"
+        style={{
+          backgroundImage:
+            "url('https://jackrugile.com/images/misc/skyline-texture.png')",
+          backgroundSize: 'cover',
+          backgroundRepeat: 'repeat',
+          backgroundPosition: 'center',
+        }}
+      />
 
-      {/* ---------- foreground content ---------- */}
-      <div className="relative z-10 max-w-xl text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-10
-                       bg-gradient-to-r from-emerald-400 to-amber-400
-                       bg-clip-text text-transparent p-5">
+      {/* Foreground Content */}
+      <div className="relative z-10 w-full max-w-5xl text-center mt-20 mb-24 px-4">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-10 bg-gradient-to-r from-emerald-400 to-amber-400 bg-clip-text text-transparent">
           {choice
-            ? choice==='ratings' ? 'Live Ratings' : 'Experience'
+            ? choice === 'ratings'
+              ? 'Live Ratings'
+              : 'Experience'
             : 'What do you want to know about Jatin?'}
         </h1>
 
         {!choice && (
-          <div className="flex justify-center gap-6 mb-20">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-12">
             <button
-              onClick={()=>setChoice('exp')}
-              className="px-6 py-3 rounded-xl bg-green-500 hover:bg-green-600 transition border-2 ">
+              onClick={() => setChoice('exp')}
+              className="px-6 py-3 rounded-xl bg-green-500 hover:bg-green-600 transition border-2"
+            >
               Experience
             </button>
             <button
-              onClick={()=>setChoice('ratings')}
-              className="px-6 py-3 rounded-xl bg-green-500 hover:bg-green-600 transition border-2">
+              onClick={() => setChoice('ratings')}
+              className="px-6 py-3 rounded-xl bg-green-500 hover:bg-green-600 transition border-2"
+            >
               Ratings
             </button>
           </div>
         )}
-     
 
-        {choice==='exp' && (
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
-            <Card title="AbilityGate.com">
-              Full‑stack hospital appointment system with QR payments,
-              Cloudinary video blogs, and Twilio OTP login.
-            </Card>
-            <Card title="Karuna Healing Mind (Intern)">
-              MERN dashboards, bcrypt‑secured login, REST APIs, manual UPI verification.
-            </Card>
+        {choice === 'exp' && (
+          <div className="flex flex-col md:flex-row md:flex-wrap justify-center ">
+ <Card title={<a href="https://www.abilitygate.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Ability Gate</a>}>
+  <div className="text-left">
+    I worked as a <strong>freelancer</strong> to build a <strong>full-stack hospital management system</strong> for Ability Gate.  
+    Key features include:
+    <ul className="list-disc list-inside mt-2">
+      <li>QR-based payment system with admin-side verification</li>
+      <li>Login/Logout functionality with secure authentication</li>
+      <li>“Wall of Honors”, Internships, and Government Policy pages</li>
+      <li>Colorful UI with animations and prescription upload</li>
+      <li>Patient history tracking system</li>
+    </ul>
+  </div>
+</Card>
+
+<Card title={<a href="https://karunahealingmind.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Karuna Healing Mind (Intern)</a>}>
+  <div className="text-left">
+    Internship duration: <strong>May 2025 – June 2025</strong><br />
+    I developed a <strong>full-stack website</strong> using the MERN stack.
+    Key features include:
+    <ul className="list-disc list-inside mt-2">
+      <li>Login/Logout with bcrypt-secured authentication</li>
+      <li>Email verification using Nodemailer</li>
+      <li>Admin and Doctor dashboards (with availability toggle)</li>
+      <li>Blog system (add/edit/delete) managed by admin</li>
+      <li>Services and multi-section About pages</li>
+      <li>Contact page with embedded map</li>
+      <li>Cloudinary media support and secure REST APIs</li>
+    </ul>
+  </div>
+</Card>
+
+
           </div>
         )}
 
-        {choice==='ratings' && (
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
+        {choice === 'ratings' && (
+          <div className="flex flex-col md:flex-row justify-center gap-6">
             <RatingCard platform="Codeforces" data={cf} />
             <RatingCard platform="CodeChef" data={cc} />
           </div>
         )}
-      </div>  
+      </div>
+
+      {/* Back Button - Fixed at Bottom Center */}
       {choice && (
-  <button
-    className="fixed right-1/3 bottom-8 text-white bg-black/60 px-4 py-2 rounded  hover:bg-black z-20"
-    onClick={() => setChoice(null)}
-  >
-    ⬅ Back
-  </button>
-)}
+        <div className="absolute bottom-6 w-full flex justify-center z-20 px-4">
+          <button
+            className="text-white bg-black/60 hover:bg-black px-6 py-2 rounded-lg transition"
+            onClick={() => setChoice(null)}
+          >
+            ⬅ Back
+          </button>
+        </div>
+      )}
     </section>
   );
 }
 
+
 /* ---------- small helpers ---------- */
 function Card({title, children}) {
   return (
-    <div className="p-6 bg-white/70 border-2 border-black rounded-xl mb-30">
+    <div className=" p-6 bg-white/70 border-2 border-black rounded-xl mb-10">
       <h2 className="text-2xl font-semibold mb-2 text-blue-800 underline">{title}</h2>
       <p className="text-sky-800">{children}</p>
     </div>

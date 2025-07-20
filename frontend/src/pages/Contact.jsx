@@ -22,30 +22,38 @@ const handlePhoneClick = () => {
     const container = containerRef.current;
     const follower  = followerRef.current;
 
-    const move = (e) => {
+   const move = (e) => {
       const { left, top } = container.getBoundingClientRect();
-      follower.style.left = `${e.clientX - left}px`;
-      follower.style.top  = `${e.clientY - top }px`;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      follower.style.left = `${clientX - left}px`;
+      follower.style.top = `${clientY - top}px`;
     };
 
     container.addEventListener('mousemove', move);
-    return () => container.removeEventListener('mousemove', move);
+    container.addEventListener('touchmove', move);
+    return () => {
+      container.removeEventListener('mousemove', move);
+      container.removeEventListener('touchmove', move);
+    };
   }, []);
-    /* ── CLICK: spawn burst ripple ─────────────────────── */
+
+  /* ── CLICK or TAP: spawn burst ripple ───────────────────── */
   const handleClick = (e) => {
     const container = containerRef.current;
-
-    const rect  = container.getBoundingClientRect();
-    const size  = 320;                      // circle size
-    const x     = e.clientX - rect.left - size / 2;
-    const y     = e.clientY - rect.top  - size / 2;
+    const rect = container.getBoundingClientRect();
+    const size = 320;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const x = clientX - rect.left - size / 2;
+    const y = clientY - rect.top - size / 2;
 
     const burst = document.createElement('span');
     burst.className =
       'absolute pointer-events-none w-[320px] h-[320px] rounded-full ' +
       'bg-cyan-400/15 blur-3xl animate-ripple';
     burst.style.left = `${x}px`;
-    burst.style.top  = `${y}px`;
+    burst.style.top = `${y}px`;
 
     container.appendChild(burst);
     setTimeout(() => burst.remove(), 1000);
@@ -55,7 +63,8 @@ const handlePhoneClick = () => {
    <div
       ref={containerRef}
       onClick={handleClick}
-      className="relative w-full h-screen overflow-hidden bg-gray-950
+      onTouchStart={handleClick}
+      className="relative w-full min-h-screen overflow-hidden bg-gray-950
                  text-white flex items-center justify-center"
     >
       {/* cursor follower halo */}
@@ -105,7 +114,7 @@ const handlePhoneClick = () => {
         </h1>
 
         {/* icon row */}
-        <div className="flex gap-5">
+        <div className="flex flex-wrap justify-center gap-4">
           {[
              {
       href: 'tel:+91 8287554309',

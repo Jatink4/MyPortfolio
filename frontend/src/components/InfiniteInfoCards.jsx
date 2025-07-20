@@ -35,11 +35,11 @@ export default function Carousel3D() {
   const rotateLeft = () => setAngle((prev) => prev - angleStep);
 
   return (
-    <div className="w-full h-screen  flex flex-col items-center justify-center overflow-hidden relative">
+    <div className="w-full   flex flex-col items-center justify-center overflow-hidden relative">
       {/* 3D Ring */}
       <div
         ref={ringRef}
-        className="relative w-[500px] h-[500px] flex items-center justify-center"
+        className="relative w-[500px] h-[400px] flex items-center justify-center"
         style={{
           perspective: "700px",
           transformStyle: "preserve-3d",
